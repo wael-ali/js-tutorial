@@ -12,7 +12,7 @@ function Question(question, answers, correct){
 // Question prototype
 Question.prototype.displayQuestion = 
 function(){
-  console.log(this.Question);
+  console.log(this.question);
 
   for (var i = 0; i < this.answers.length; i++) {
     console.log(i + '-' + this.answers[i]);
@@ -20,12 +20,23 @@ function(){
 }
 
 Question.prototype.checkAnswer = 
-function(ans){
+function(ans, callback){
+  var sc;
   if (ans === this.correct){
-    console.log('Correct Answer')
+    console.log('Correct Answer');
+     sc = callback(true);
+     this.displayScore(sc);
   }else{
     console.log('Wrong Answer. Try Again!');
+    sc = callback(false);
+    this.displayScore(sc);
   }
+}
+
+Question.prototype.displayScore =
+function(score){
+  console.log('Your current score is:  ' + score);
+  console.log('------------------------------------');
 }
 
 // question instances
@@ -47,17 +58,31 @@ var q3 = new Question(
 
 var questions = [q1, q2, q3];
 // functions outside the object 
+  // closure for upfdating the score
+  function score(){
+  var sc = 0;
+  return function(correct){
+    if (correct) {
+      sc++;
+    }
+    return sc;
+  }
+}
+
+
+var keepScore = score();
+
+nextQuestion();
 function nextQuestion(){
   var n = Math.floor(Math.random() * questions.length);
   questions[n].displayQuestion();
   var answer = prompt("Please select the correct answer");
   if (answer !== 'exit') { 
-    questions[n].checkAnswer(parseInt(answer));
+    questions[n].checkAnswer(parseInt(answer),keepScore);
     nextQuestion();
   }
 }
 
-nextQuestion();
 
 
 
