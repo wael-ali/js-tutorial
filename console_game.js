@@ -1,12 +1,15 @@
+// to protect our code = make private == privacy
+// by this our code is safe and can be included as aplugin in another code
+// no other code would be able to override it
 (function(){
-  
 
+// Question object
 function Question(question, answers, correct){
   this.question = question;
   this.answers  = answers;
   this.correct  = correct;
 }
-
+// Question prototype
 Question.prototype.displayQuestion = 
 function(){
   console.log(this.Question);
@@ -25,7 +28,7 @@ function(ans){
   }
 }
 
-
+// question instances
 var q1 = new Question(
   "Is Berlin biger than Hamburg?",
   ["yes", "no"],
@@ -43,9 +46,23 @@ var q3 = new Question(
   );
 
 var questions = [q1, q2, q3];
-var n = Math.floor(Math.random() * questions.length);
-questions[n].displayQuestion();
-var answer = parseInt(prompt("Please select the correct answer"));
-questions[n].checkAnswer(answer);
+// functions outside the object 
+function nextQuestion(){
+  var n = Math.floor(Math.random() * questions.length);
+  questions[n].displayQuestion();
+  var answer = prompt("Please select the correct answer");
+  if (answer !== 'exit') { 
+    questions[n].checkAnswer(parseInt(answer));
+    nextQuestion();
+  }
+}
+
+nextQuestion();
+
+
+
+
+
+// the end od the IFE protectmode
 })();
 
